@@ -7,14 +7,11 @@ public class Main {
     public static void main(String[] args) {
         menu();
     }
-
-
     public static void menu() {
         PetService ps = null;
-        try {
+        try (Scanner sc = new Scanner(System.in);){
             int option;
             ps = new PetService();
-            Scanner sc = new Scanner(System.in);
             System.out.println("1-Cadastrar um novo Pet");
             System.out.println("2-Cadastro de Animal");
             System.out.println("3-Deletar um pet cadastrado");

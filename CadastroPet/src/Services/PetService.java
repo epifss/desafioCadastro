@@ -6,6 +6,9 @@ import Enums.Tipo;
 import Exceptions.PetException;
 
 import java.io.*;
+import java.sql.Timestamp;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
@@ -13,10 +16,11 @@ import java.util.Scanner;
 public class PetService {
     private static List<Pet> pets = new ArrayList<Pet>();
     public void newPet() {
-        Scanner sc = null;
         File formulario = new File("formulario.txt");
-        try ( BufferedReader br = new BufferedReader(new FileReader(formulario))){
+        Scanner sc = null;
+        try ( BufferedReader br = new BufferedReader(new FileReader(formulario))) {
             String[] questions = new String[10];
+            sc = new Scanner(System.in);
             int i = 0;
             while (true) {
                 questions[i] = br.readLine();
@@ -25,7 +29,7 @@ public class PetService {
                     break;
                 }
             }
-            sc = new Scanner(System.in);
+
             System.out.println(questions[0]);
             String nome=sc.nextLine();
 
@@ -57,7 +61,7 @@ public class PetService {
             System.out.println(questions[6]);
             String raça = sc.nextLine();
             Pet pet = new Pet(nome, tipo, sexo, endereço, idade, peso, raça);
-            pets.add(pet);
+            savePet(pet);
             System.out.println("Pet cadastrado com sucesso!");
 
         } catch (FileNotFoundException e) {
@@ -79,5 +83,29 @@ public class PetService {
         i++;
         System.out.println(i+"-"+ pet.getNome()+","+ pet.getIdade()+","+ pet.getSexo());
     }
+    }
+    public void savePet(Pet pet) {
+        LocalDateTime now = LocalDateTime.now();
+        String date = (now.format(DateTimeFormatter.ofPattern("YYYYMMDD'T'HHmm")));
+        String name = pet.getNome().toUpperCase().replaceAll(" ", "");
+
+
+        try (BufferedWriter bw = new BufferedWriter(new FileWriter("Saved_Pets\\"+date+"-"+name+".txt"));){
+            bw.write("1-"+pet.getNome());
+            bw.newLine();
+            bw.write("2-"+pet.getTipo());
+            bw.newLine();
+            bw.write("3-"+pet.getSexo());
+            bw.newLine();
+            bw.write("4-"+pet.getEndereço());
+            bw.newLine();
+            bw.write("5-"+pet.getIdade()+" anos");
+            bw.newLine();
+            bw.write("6-"+pet.getPeso()+"Kg");
+            bw.newLine();
+            bw.write("7- "+pet.getRaça());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }
