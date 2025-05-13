@@ -16,23 +16,28 @@ public class PetService {
         Scanner sc = null;
         File formulario = new File("formulario.txt");
         try ( BufferedReader br = new BufferedReader(new FileReader(formulario))){
-            String linha;
-            while ((linha = br.readLine()) != null) {
-                System.out.println(linha);
+            String[] questions = new String[10];
+            int i = 0;
+            while (true) {
+                questions[i] = br.readLine();
+                i++;
+                if (br.readLine()==null){
+                    break;
+                }
             }
             sc = new Scanner(System.in);
-            System.out.println("1: ");
+            System.out.println(questions[0]);
             String nome=sc.nextLine();
 
-            System.out.println("2: ");
+            System.out.println(questions[1]);
             String tp=sc.nextLine();
             Tipo tipo = Tipo.valueOf(tp.toUpperCase());
 
-            System.out.println("3: ");
+            System.out.println(questions[2]);
             String sx = sc.nextLine();
             Sexo sexo = Sexo.valueOf(sx.toUpperCase());
 
-            System.out.println("4: ");
+            System.out.println(questions[3]);
             System.out.println("numero da casa: ");
             String num = sc.nextLine();
             System.out.println("Cidade: ");
@@ -41,15 +46,15 @@ public class PetService {
             String rua = sc.nextLine();
             String endereço= (rua+", "+num+", "+cidade);
 
-            System.out.println("5: ");
+            System.out.println(questions[4]);
             double idade = sc.nextDouble();
             sc.nextLine();
 
-            System.out.println("6: ");
+            System.out.println(questions[5]);
             double peso = sc.nextDouble();
             sc.nextLine();
 
-            System.out.println("7: ");
+            System.out.println(questions[6]);
             String raça = sc.nextLine();
             Pet pet = new Pet(nome, tipo, sexo, endereço, idade, peso, raça);
             pets.add(pet);
@@ -72,7 +77,7 @@ public class PetService {
         int i=0;
     for (Pet pet : pets) {
         i++;
-        System.out.println(i+"-"+ pet.getNome());
+        System.out.println(i+"-"+ pet.getNome()+","+ pet.getIdade()+","+ pet.getSexo());
     }
     }
 }
