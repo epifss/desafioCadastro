@@ -33,4 +33,65 @@ public class Pet {
         this.raça = raça;
 
     }
+
+    public String getNome() {
+        return nome;
+    }
+
+    public void setNome(String nome) {
+        this.nome = nome;
+    }
+
+    public Tipo getTipo() {
+        return tipo;
+    }
+
+    public void setTipo(Tipo tipo) {
+        this.tipo = tipo;
+    }
+
+    public Sexo getSexo() {
+        return sexo;
+    }
+
+    public void setSexo(Sexo sexo) {
+        this.sexo = sexo;
+    }
+
+    public String getEndereço() {
+        return endereço;
+    }
+
+    public void setEndereço(String endereço) {
+        this.endereço = endereço;
+    }
+
+    public double getIdade() {
+        return idade;
+    }
+
+    public void setIdade(double idade) {
+        this.idade = idade;
+    }
+
+    public double getPeso() {
+        return peso;
+    }
+
+    public void setPeso(double peso) {
+        this.peso = peso;
+    }
+
+    public String getRaça() {
+        return raça;
+    }
+
+    public void setRaça(String raça) {
+        this.raça = raça;
+    }
+
+    @Override
+    public String toString() {
+        return nome;
+    }
 }
