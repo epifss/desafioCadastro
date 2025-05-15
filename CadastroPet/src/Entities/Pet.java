@@ -3,6 +3,8 @@ import Enums.Sexo;
 import Enums.Tipo;
 import Exceptions.PetException;
 
+import java.io.File;
+
 public class Pet {
     private String nome;
     private Tipo tipo;
@@ -11,6 +13,7 @@ public class Pet {
     private double idade;
     private double peso;
     private String raça;
+    private File arquivo;
 
     public Pet() {}
 
@@ -40,6 +43,14 @@ public class Pet {
 
     public void setNome(String nome) {
         this.nome = nome;
+    }
+
+    public File getArquivo() {
+        return arquivo;
+    }
+
+    public void setArquivo(File arquivo) {
+        this.arquivo = arquivo;
     }
 
     public Tipo getTipo() {
@@ -92,6 +103,15 @@ public class Pet {
 
     @Override
     public String toString() {
-        return nome;
+        return String.format(
+                "%s - %s - %s - %s - %s anos - %.0fkg - %s",
+                nome,
+                tipo,
+                sexo,
+                endereço,
+                idade,
+                peso,
+                raça
+        );
     }
 }
