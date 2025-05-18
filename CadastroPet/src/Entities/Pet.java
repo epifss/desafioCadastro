@@ -41,7 +41,10 @@ public class Pet {
         return nome;
     }
 
-    public void setNome(String nome) {
+    public void setNome(String nome) throws PetException {
+        if (!nome.contains(" ")) {
+            throw new PetException("É necessário cadastrar nome e sobrenome!");
+        }
         this.nome = nome;
     }
 
@@ -57,17 +60,10 @@ public class Pet {
         return tipo;
     }
 
-    public void setTipo(Tipo tipo) {
-        this.tipo = tipo;
-    }
-
     public Sexo getSexo() {
         return sexo;
     }
 
-    public void setSexo(Sexo sexo) {
-        this.sexo = sexo;
-    }
 
     public String getEndereço() {
         return endereço;
@@ -81,7 +77,10 @@ public class Pet {
         return idade;
     }
 
-    public void setIdade(double idade) {
+    public void setIdade(double idade) throws PetException {
+        if (idade< 0|| idade > 20) {
+            throw new PetException("Idade invalida");
+        }
         this.idade = idade;
     }
 
@@ -89,7 +88,10 @@ public class Pet {
         return peso;
     }
 
-    public void setPeso(double peso) {
+    public void setPeso(double peso) throws PetException {
+        if (peso < 0.5|| peso > 60) {
+            throw new PetException("Peso invalido");
+        }
         this.peso = peso;
     }
 

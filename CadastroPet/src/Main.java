@@ -1,9 +1,6 @@
 import java.util.InputMismatchException;
 import java.util.NoSuchElementException;
 import java.util.Scanner;
-
-import Services.PetService;
-
 import static Services.PetService.*;
 
 
@@ -17,11 +14,10 @@ public class Main {
     }
 
     public static void menu(Scanner sc) {
-        PetService ps = null;
             try {
                 String option;
                 System.out.println("1-Cadastrar um novo Pet");
-                System.out.println("2-Cadastro de Animal");
+                System.out.println("2-Alterar um pet cadastrado");
                 System.out.println("3-Deletar um pet cadastrado");
                 System.out.println("4-Listar todos os pets cadastrados");
                 System.out.println("5-Listar pets por algum critério (idade, nome, raça)");
@@ -33,7 +29,7 @@ public class Main {
                         newPet(sc);
                         break;
                     case "2":
-                        //updatePet();
+                        updatePet(sc);
                         break;
                     case "3":
                         //deletePet();

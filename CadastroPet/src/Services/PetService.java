@@ -82,21 +82,17 @@ public class PetService {
 
     }
 
-    public static void savePet(Pet pet) {
+    public static void savePet(Pet pet) throws IOException {
         LocalDateTime now = LocalDateTime.now();
         String date = (now.format(DateTimeFormatter.ofPattern("yyyyMMdd'T'HHmm")));
         String name = pet.getNome().toUpperCase().replaceAll(" ", "");
-        BufferedWriter bw;
+        BufferedWriter bw=null;
         File arquivo;
 
         try {
-            if (!(pet.getArquivo()==null)) {
-                arquivo = pet.getArquivo();
-                bw = new BufferedWriter(new FileWriter(pet.getArquivo().getPath()));
-            } else {
-                arquivo = new File(("Saved_Pets\\" + date + "-" + name + ".txt"));
-                bw = new BufferedWriter(new FileWriter(arquivo));
-            }
+
+            arquivo = new File(("Saved_Pets\\" + date + "-" + name + ".txt"));
+            bw = new BufferedWriter(new FileWriter(arquivo));
             bw.write("1-" + pet.getNome().toUpperCase());
             bw.newLine();
             bw.write("2-" + pet.getTipo());
@@ -115,19 +111,21 @@ public class PetService {
         } catch (IOException e) {
             System.out.println(e.getMessage());
         }
+        finally{ bw.close();
+        }
     }
+
     public static void buscaPet(Scanner sc) {
-        List <Integer> busca= filterPet(sc);
+        List<Integer> busca = filterPet(sc);
         System.out.println("Resultado da busca: ");
         for (Integer index : busca) {
-            System.out.println((index+1)+"-"+pets.get(index));
+            System.out.println((index + 1) + "-" + pets.get(index));
         }
 
 
     }
 
     public static List<Integer> filterPet(Scanner sc) {
-        List<Integer> petsIndex = new ArrayList<>();
         System.out.println("Escolha o critério de busca:");
         System.out.println("1 - Nome ou sobrenome");
         System.out.println("2 - Sexo");
@@ -146,31 +144,15 @@ public class PetService {
         System.out.println("6 - Endereço");
         int opcao2 = sc1.nextInt();
         sc1.nextLine();*/
-        List <Integer> resultado;
+        List<Integer> resultado;
         switch (opcao) {
             case 1:
                 System.out.println("Digite o nome do pet: ");
                 String nome = sc.nextLine();
 
                 System.out.println("selecione o tipo:\n1-cachorro\n2-gato ");
-                int opcao1 = sc.nextInt();
-                sc.nextLine();
-                Tipo tipo = null;
-                switch (opcao1) {
-                    case 1:
-                        tipo = Tipo.CACHORRO;
-                        break;
-                    case 2:
-                        tipo = Tipo.GATO;
-                        break;
-                    default:
-                        System.out.println("opção invalida");
-                        break;
-                }
-                resultado = filtraPorNome(nome, tipo,sc);
-                for (Integer index : resultado) {
-                    System.out.println(pets.get(index));
-                }
+                Tipo tipo = selecionarTipo(sc);
+                resultado = filtraPorNome(nome, tipo, sc);
                 return resultado;
             case 2:
                 System.out.println("Digite o sexo do pet (MACHO/FEMEA): ");
@@ -178,24 +160,8 @@ public class PetService {
                 Sexo sexo = Sexo.valueOf(sx.toUpperCase());
 
                 System.out.println("selecione o tipo:\n1-cachorro\n2-gato ");
-                int opcao2 = sc.nextInt();
-                sc.nextLine();
-                tipo = null;
-                switch (opcao2) {
-                    case 1:
-                        tipo = Tipo.CACHORRO;
-                        break;
-                    case 2:
-                        tipo = Tipo.GATO;
-                        break;
-                    default:
-                        System.out.println("opção invalida");
-                        break;
-                }
+                tipo = selecionarTipo(sc);
                 resultado = filtraPorSexo(sexo, tipo, sc);
-                for (Integer index : resultado) {
-                    System.out.println(pets.get(index));
-                }
                 return resultado;
 
             case 3:
@@ -204,24 +170,8 @@ public class PetService {
                 sc.nextLine();
 
                 System.out.println("selecione o tipo:\n1-cachorro\n2-gato ");
-                int opcao3 = sc.nextInt();
-                sc.nextLine();
-                tipo = null;
-                switch (opcao3) {
-                    case 1:
-                        tipo = Tipo.CACHORRO;
-                        break;
-                    case 2:
-                        tipo = Tipo.GATO;
-                        break;
-                    default:
-                        System.out.println("opção invalida");
-                        break;
-                }
+                tipo = selecionarTipo(sc);
                 resultado = filtraPorIdade(idade, tipo, sc);
-                for (Integer index : resultado) {
-                    System.out.println(pets.get(index));
-                }
                 return resultado;
 
             case 4:
@@ -230,24 +180,8 @@ public class PetService {
                 sc.nextLine();
 
                 System.out.println("selecione o tipo:\n1-cachorro\n2-gato ");
-                int opcao4 = sc.nextInt();
-                sc.nextLine();
-                tipo = null;
-                switch (opcao4) {
-                    case 1:
-                        tipo = Tipo.CACHORRO;
-                        break;
-                    case 2:
-                        tipo = Tipo.GATO;
-                        break;
-                    default:
-                        System.out.println("opção invalida");
-                        break;
-                }
+                tipo = selecionarTipo(sc);
                 resultado = filtraPorPeso(peso, tipo, sc);
-                for (Integer index : resultado) {
-                    System.out.println(pets.get(index));
-                }
                 return resultado;
 
             case 5:
@@ -255,51 +189,24 @@ public class PetService {
                 String raça = sc.nextLine();
 
                 System.out.println("selecione o tipo:\n1-cachorro\n2-gato ");
-                int opçao = sc.nextInt();
                 sc.nextLine();
-                tipo = null;
-                switch (opçao) {
-                    case 1:
-                        tipo = Tipo.CACHORRO;
-                        break;
-                    case 2:
-                        tipo = Tipo.GATO;
-                        break;
-                    default:
-                        System.out.println("opção invalida");
-                        break;
-                }
-                resultado = filtraPorRaça(raça, tipo,sc);
+                tipo = selecionarTipo(sc);
+                resultado = filtraPorRaça(raça, tipo, sc);
                 return resultado;
             case 6:
                 System.out.println("Digite o endereço do pet (rua, número, cidade): ");
                 String endereco = sc.nextLine().toLowerCase();
 
                 System.out.println("selecione o tipo:\n1-cachorro\n2-gato ");
-                int opcao6 = sc.nextInt();
                 sc.nextLine();
-                tipo = null;
-                switch (opcao6) {
-                    case 1:
-                        tipo = Tipo.CACHORRO;
-                        break;
-                    case 2:
-                        tipo = Tipo.GATO;
-                        break;
-                    default:
-                        System.out.println("opção invalida");
-                        break;
-                }
+                tipo = selecionarTipo(sc);
                 resultado = filtraPorEndereco(endereco, tipo, sc);
-                for (Integer index : resultado) {
-                    System.out.println(pets.get(index));
-                }
                 return resultado;
         }
         return null;
     }
 
-    public static List<Integer> filtraPorNome(String nome, Tipo tipo,Scanner sc) {
+    public static List<Integer> filtraPorNome(String nome, Tipo tipo, Scanner sc) {
         List<Integer> petsPorNome = new ArrayList<>();
         for (Pet pet : pets) {
             if (pet.getNome().toLowerCase().contains(nome) && pet.getTipo() == tipo) {
@@ -308,6 +215,7 @@ public class PetService {
         }
         return petsPorNome;
     }
+
     public static List<Integer> filtraPorSexo(Sexo sexo, Tipo tipo, Scanner sc) {
         List<Integer> petsPorSexo = new ArrayList<>();
         for (Pet pet : pets) {
@@ -338,16 +246,7 @@ public class PetService {
         return petsPorPeso;
     }
 
-    public static List<Integer> filtraPorEndereço(String endereco, Tipo tipo, Scanner sc) {
-        List<Integer> petsPorEndereco = new ArrayList<>();
-        for (Pet pet : pets) {
-            if (pet.getEndereço().toLowerCase().contains(endereco.toLowerCase()) && pet.getTipo() == tipo) {
-                petsPorEndereco.add(pets.indexOf(pet));
-            }
-        }
-        return petsPorEndereco;
-    }
-    public static List<Integer> filtraPorRaça(String raça, Tipo tipo,Scanner sc) {
+    public static List<Integer> filtraPorRaça(String raça, Tipo tipo, Scanner sc) {
         List<Integer> petsPorRaça = new ArrayList<>();
         for (Pet pet : pets) {
             if (pet.getRaça().toLowerCase().contains(raça) && pet.getTipo() == tipo) {
@@ -358,6 +257,7 @@ public class PetService {
         }
         return petsPorRaça;
     }
+
     public static List<Integer> filtraPorEndereco(String endereco, Tipo tipo, Scanner sc) {
         List<Integer> petsPorEndereco = new ArrayList<>();
         for (Pet pet : pets) {
@@ -367,6 +267,95 @@ public class PetService {
         }
         return petsPorEndereco;
     }
+
+    public static Tipo selecionarTipo(Scanner sc) {
+        System.out.println("selecione o tipo:\n1-cachorro\n2-gato ");
+        int opcao = sc.nextInt();
+        sc.nextLine();
+        Tipo tipo = null;
+        switch (opcao) {
+            case 1:
+                return Tipo.CACHORRO;
+            case 2:
+                return Tipo.GATO;
+            default:
+                System.out.println("opção invalida");
+                return null;
+        }
+    }
+
+    public static void updatePet(Scanner sc) {
+        try {
+            List<Integer> altpet = filterPet(sc);
+            for (Integer index : altpet) {
+                System.out.println("id: " + index + "-" + pets.get(index));
+            }
+            System.out.println("selecione o id do pet que deseja alterar:");
+            int id = sc.nextInt();
+            if (!altpet.contains(id)) {
+                System.out.println("id invalido");
+            }
+            boolean continuar = true;
+            while (continuar) {
+                System.out.println("1- Alterar nome do pet.");
+                System.out.println("2- Alterar idade.");
+                System.out.println("3- Alterar peso.");
+                System.out.println("4- Alterar endereço.");
+                System.out.println("5- Alterar raça.");
+                System.out.println("6- Sair.");
+                int opcao = sc.nextInt();
+                sc.nextLine();
+
+                switch (opcao) {
+                    case 1:
+                        System.out.println("Novo nome: ");
+                        String nome = sc.nextLine();
+                        pets.get(id).setNome(nome);
+                        break;
+                    case 2:
+                        System.out.println("Nova idade: ");
+                        int idade = sc.nextInt();
+                        pets.get(id).setIdade(idade);
+                        break;
+                    case 3:
+                        System.out.println("Novo peso: ");
+                        double peso = sc.nextDouble();
+                        pets.get(id).setPeso(peso);
+                        break;
+                    case 4:
+                        System.out.println("Novo endereço: ");
+                        System.out.println("Cidade: ");
+                        String cidade = sc.nextLine();
+                        System.out.println("Rua: ");
+                        String rua = sc.nextLine();
+                        System.out.println("Numero: ");
+                        String numero = sc.nextLine();
+                        String endereco = (rua + "," + numero + "," + cidade);
+                        pets.get(id).setEndereço(endereco);
+                        break;
+                    case 5:
+                        System.out.println("Nova raça: ");
+                        String raça = sc.nextLine();
+                        pets.get(id).setRaça(raça);
+                        break;
+                    case 6:
+                        continuar = false;
+                        break;
+                    default:
+                        System.out.println("Opção invalida");
+                        break;
+                }
+                pets.get(id).getArquivo().delete();
+                savePet(pets.get(id));
+            }
+        }catch (PetException e) {
+            e.getMessage();
+        } catch (IOException e) {
+            System.out.println("erro ao salvar arquivo de pet"+e.getMessage());
+        }
+
+    }
+
 
 
 }
