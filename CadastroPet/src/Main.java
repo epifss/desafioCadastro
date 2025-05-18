@@ -32,7 +32,7 @@ public class Main {
                         updatePet(sc);
                         break;
                     case "3":
-                        //deletePet();
+                        deletePet(sc);
                         break;
                     case "4":
                         listPets(sc);

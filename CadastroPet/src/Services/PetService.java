@@ -31,12 +31,10 @@ public class PetService {
             String nome = sc.nextLine();
 
             System.out.println(questions[1]);
-            String tp = sc.nextLine();
-            Tipo tipo = Tipo.valueOf(tp.toUpperCase());
+            Tipo tipo = selecionarTipo(sc);
 
             System.out.println(questions[2]);
-            String sx = sc.nextLine();
-            Sexo sexo = Sexo.valueOf(sx.toUpperCase());
+            Sexo sexo = selecionarSexo(sc);
 
             System.out.println(questions[3]);
             System.out.println("numero da casa: ");
@@ -107,7 +105,7 @@ public class PetService {
             bw.newLine();
             bw.write("7- " + pet.getRaça().toUpperCase());
             pet.setArquivo(arquivo);
-            System.out.println(pet.getArquivo());
+            System.out.println("Salvo em: "+pet.getArquivo());
         } catch (IOException e) {
             System.out.println(e.getMessage());
         }
@@ -155,9 +153,8 @@ public class PetService {
                 resultado = filtraPorNome(nome, tipo, sc);
                 return resultado;
             case 2:
-                System.out.println("Digite o sexo do pet (MACHO/FEMEA): ");
-                String sx = sc.nextLine();
-                Sexo sexo = Sexo.valueOf(sx.toUpperCase());
+                System.out.println("selecione o sexo:\n1-Fêmea\n2-Macho ");
+                Sexo sexo = selecionarSexo(sc);
 
                 System.out.println("selecione o tipo:\n1-cachorro\n2-gato ");
                 tipo = selecionarTipo(sc);
@@ -189,7 +186,6 @@ public class PetService {
                 String raça = sc.nextLine();
 
                 System.out.println("selecione o tipo:\n1-cachorro\n2-gato ");
-                sc.nextLine();
                 tipo = selecionarTipo(sc);
                 resultado = filtraPorRaça(raça, tipo, sc);
                 return resultado;
@@ -198,7 +194,6 @@ public class PetService {
                 String endereco = sc.nextLine().toLowerCase();
 
                 System.out.println("selecione o tipo:\n1-cachorro\n2-gato ");
-                sc.nextLine();
                 tipo = selecionarTipo(sc);
                 resultado = filtraPorEndereco(endereco, tipo, sc);
                 return resultado;
@@ -269,7 +264,6 @@ public class PetService {
     }
 
     public static Tipo selecionarTipo(Scanner sc) {
-        System.out.println("selecione o tipo:\n1-cachorro\n2-gato ");
         int opcao = sc.nextInt();
         sc.nextLine();
         Tipo tipo = null;
@@ -278,6 +272,19 @@ public class PetService {
                 return Tipo.CACHORRO;
             case 2:
                 return Tipo.GATO;
+            default:
+                System.out.println("opção invalida");
+                return null;
+        }
+    }
+    public static Sexo selecionarSexo(Scanner sc) {
+        int opcao = sc.nextInt();
+        sc.nextLine();
+        switch (opcao) {
+            case 1:
+                return Sexo.FEMEA;
+            case 2:
+                return Sexo.MACHO;
             default:
                 System.out.println("opção invalida");
                 return null;
@@ -314,7 +321,7 @@ public class PetService {
                         break;
                     case 2:
                         System.out.println("Nova idade: ");
-                        int idade = sc.nextInt();
+                        double idade = sc.nextDouble();
                         pets.get(id).setIdade(idade);
                         break;
                     case 3:
@@ -353,6 +360,18 @@ public class PetService {
         } catch (IOException e) {
             System.out.println("erro ao salvar arquivo de pet"+e.getMessage());
         }
+
+    }
+    public static void deletePet(Scanner sc) {
+            List<Integer> altpet = filterPet(sc);
+            for (Integer index : altpet) {
+                System.out.println("id: " + index + "-" + pets.get(index));
+            }
+            System.out.println("Selecione o id do pet que deseja deletar:");
+            int id = sc.nextInt();
+            pets.get(id).getArquivo().delete();
+            pets.remove(id);
+            System.out.println("Pet deletado com sucesso!");
 
     }
 
